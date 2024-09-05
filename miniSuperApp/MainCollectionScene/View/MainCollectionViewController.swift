@@ -5,6 +5,7 @@ final class MainCollectionViewController: UIViewController {
     private let viewModel: MainCollectionViewModel
     
     //MARK: UI Components
+    private let titleLabel = makeTitle()
     private lazy var collectionView = makeCollectionView()
     
     //MARK: LifeCycle
@@ -27,6 +28,7 @@ final class MainCollectionViewController: UIViewController {
     //MARK: Selectors
     private func updateUI() {
         view.backgroundColor = .systemBackground
+        titleLabel.text = "mini Applications"
     }
     
     private func updateCollectionView() {
@@ -34,6 +36,7 @@ final class MainCollectionViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.identifier)
+
     }
 }
 
@@ -55,23 +58,38 @@ extension MainCollectionViewController: UICollectionViewDataSource {
 
 //MARK: - UICollectionViewDelegate
 extension MainCollectionViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {        
+        let weatherViewConrtoller = WeatherViewConrtoller()
+        weatherViewConrtoller.modalPresentationStyle = .pageSheet
+
+        present(weatherViewConrtoller, animated: true, completion: nil)
+    }
 }
 
 
 //MARK: - Setup Constrain
 private extension MainCollectionViewController {
     func setupConstrain() {
+        setupTitleLabel()
         setupCollectionView()
+    }
+    
+    func setupTitleLabel() {
+        view.addSubview(titleLabel)
+        
+        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30)
+        ])
     }
     
     func setupCollectionView() {
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
@@ -80,6 +98,15 @@ private extension MainCollectionViewController {
 
 //MARK: - Make UI
 private extension MainCollectionViewController {
+    static func makeTitle() -> UILabel {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.textAlignment = .center
+        view.font = UIFont.systemFont(ofSize: 32)
+        view.textColor = .label
+        return view
+    }
+    
     func makeCollectionView() -> UICollectionView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -89,4 +116,3 @@ private extension MainCollectionViewController {
             frame: .zero, collectionViewLayout: layout)
     }
 }
-

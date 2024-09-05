@@ -26,9 +26,11 @@ final class MainCollectionViewCell: UICollectionViewCell {
     }
     
     private func updateUI() {
+        contentView.backgroundColor = .systemGray2
         titleLabel.text = viewModel?.model.text
+        contentView.layer.cornerRadius = 20
+        contentView.layer.masksToBounds = true
     }
-    
 }
 
 //MARK: - Setup Constrain
@@ -54,7 +56,7 @@ private extension MainCollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.textAlignment = .center
         view.font = UIFont.systemFont(ofSize: 16)
-        view.textColor = .black
+        view.textColor = .label
         return view
     }
 }

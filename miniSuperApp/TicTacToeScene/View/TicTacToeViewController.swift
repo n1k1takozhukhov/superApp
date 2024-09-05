@@ -29,7 +29,7 @@ final class TicTacToeViewController: UIViewController {
         switchFrameSize.image = UIImage(systemName: viewModel.imageName)
         updateSheetPresentation()
         
-        titleLabel.text = "CrosswordViewController ☁️"
+        titleLabel.text = "TicTacToeViewController ☁️"
         titleLabel.font = .systemFont(ofSize: 28)
         
     }

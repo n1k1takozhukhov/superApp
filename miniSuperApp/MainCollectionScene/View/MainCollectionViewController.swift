@@ -58,11 +58,21 @@ extension MainCollectionViewController: UICollectionViewDataSource {
 
 //MARK: - UICollectionViewDelegate
 extension MainCollectionViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {        
-        let weatherViewConrtolTicTacToeViewControllerler = WeatherViewConrtoller()
-        weatherViewConrtoller.modalPresentationStyle = .pageSheet
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cellViewModel = viewModel.cellViewModel(at: indexPath.row)
+        let viewController: UIViewController
 
-        present(weatherViewConrtoller, animated: true, completion: nil)
+        switch cellViewModel.model.type {
+        case .weather:
+            viewController = WeatherViewController()
+        case .crossword:
+            viewController = CrosswordViewController()
+        case .ticTacToe:
+            viewController = TicTacToeViewController()
+        }
+
+        viewController.modalPresentationStyle = .pageSheet // для 1/2 экрана
+        present(viewController, animated: true, completion: nil)
     }
 }
 

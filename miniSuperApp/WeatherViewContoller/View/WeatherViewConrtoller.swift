@@ -1,7 +1,7 @@
 import UIKit
 import CoreLocation
 
-final class WeatherViewConrtoller: UIViewController {
+final class WeatherViewController: UIViewController {
     //MARK: Variables
     private let viewModel = WeatherViewModel()
     private let locationManager = CLLocationManager()
@@ -44,7 +44,7 @@ final class WeatherViewConrtoller: UIViewController {
 
 
 //MARK: - Screen Rotation
-extension WeatherViewConrtoller {
+extension WeatherViewController {
     private func updateSheetPresentation() {
         guard let sheetPresentation = self.presentationController as? UISheetPresentationController else { return }
         
@@ -73,7 +73,7 @@ extension WeatherViewConrtoller {
 
 
 //MARK: - Setup Constrain
-private extension WeatherViewConrtoller {
+private extension WeatherViewController {
     func setupConstrain() {
         setupSwitchFrameSize()
         setupConstrains()
@@ -120,7 +120,7 @@ private extension WeatherViewConrtoller {
 
 
 //MARK: - Make UI
-private extension WeatherViewConrtoller {
+private extension WeatherViewController {
     static func makeTitle() -> UILabel {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false

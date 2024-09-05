@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		8D1371492C88DBD700F125A2 /* WeatherViewConrtoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1371482C88DBD700F125A2 /* WeatherViewConrtoller.swift */; };
 		8D13714B2C88F01300F125A2 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D13714A2C88F01300F125A2 /* WeatherViewModel.swift */; };
+		8D1371502C89D2A200F125A2 /* CrosswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D13714F2C89D2A200F125A2 /* CrosswordViewController.swift */; };
+		8D1371522C89D2C700F125A2 /* CrosswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1371512C89D2C700F125A2 /* CrosswordViewModel.swift */; };
+		8D1371572C89D77800F125A2 /* TicTacToeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1371562C89D77800F125A2 /* TicTacToeViewController.swift */; };
+		8D1371592C89D78000F125A2 /* TicTacToeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1371582C89D78000F125A2 /* TicTacToeViewModel.swift */; };
 		8D4412612C88230600071855 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4412602C88230600071855 /* AppDelegate.swift */; };
 		8D4412632C88230600071855 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4412622C88230600071855 /* SceneDelegate.swift */; };
 		8D4412652C88230600071855 /* MainCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4412642C88230600071855 /* MainCollectionViewController.swift */; };
@@ -43,6 +47,10 @@
 /* Begin PBXFileReference section */
 		8D1371482C88DBD700F125A2 /* WeatherViewConrtoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewConrtoller.swift; sourceTree = "<group>"; };
 		8D13714A2C88F01300F125A2 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
+		8D13714F2C89D2A200F125A2 /* CrosswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrosswordViewController.swift; sourceTree = "<group>"; };
+		8D1371512C89D2C700F125A2 /* CrosswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrosswordViewModel.swift; sourceTree = "<group>"; };
+		8D1371562C89D77800F125A2 /* TicTacToeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeViewController.swift; sourceTree = "<group>"; };
+		8D1371582C89D78000F125A2 /* TicTacToeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeViewModel.swift; sourceTree = "<group>"; };
 		8D44125D2C88230600071855 /* miniSuperApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = miniSuperApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D4412602C88230600071855 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8D4412622C88230600071855 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +119,56 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		8D13714C2C89D27800F125A2 /* CrosswordScene */ = {
+			isa = PBXGroup;
+			children = (
+				8D13714E2C89D29100F125A2 /* ViewModel */,
+				8D13714D2C89D28E00F125A2 /* View */,
+			);
+			path = CrosswordScene;
+			sourceTree = "<group>";
+		};
+		8D13714D2C89D28E00F125A2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8D13714F2C89D2A200F125A2 /* CrosswordViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8D13714E2C89D29100F125A2 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8D1371512C89D2C700F125A2 /* CrosswordViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8D1371532C89D75D00F125A2 /* TicTacToeScene */ = {
+			isa = PBXGroup;
+			children = (
+				8D1371552C89D77000F125A2 /* ViewModel */,
+				8D1371542C89D76D00F125A2 /* View */,
+			);
+			path = TicTacToeScene;
+			sourceTree = "<group>";
+		};
+		8D1371542C89D76D00F125A2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8D1371562C89D77800F125A2 /* TicTacToeViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8D1371552C89D77000F125A2 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8D1371582C89D78000F125A2 /* TicTacToeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		8D4412542C88230600071855 = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +195,8 @@
 				8D4412912C8823D300071855 /* Application */,
 				8D4412922C8823DC00071855 /* MainCollectionScene */,
 				8D1371452C88DB7700F125A2 /* WeatherViewContoller */,
+				8D13714C2C89D27800F125A2 /* CrosswordScene */,
+				8D1371532C89D75D00F125A2 /* TicTacToeScene */,
 				8D4412972C88258400071855 /* DataModel */,
 				8D4412902C8823BA00071855 /* Support Files */,
 			);
@@ -361,10 +421,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D4412652C88230600071855 /* MainCollectionViewController.swift in Sources */,
+				8D1371592C89D78000F125A2 /* TicTacToeViewModel.swift in Sources */,
 				8D13714B2C88F01300F125A2 /* WeatherViewModel.swift in Sources */,
 				8D44129C2C88288B00071855 /* MainCollectionViewCell.swift in Sources */,
+				8D1371572C89D77800F125A2 /* TicTacToeViewController.swift in Sources */,
 				8D4412962C88247300071855 /* MainCollectionViewModel.swift in Sources */,
 				8D4412612C88230600071855 /* AppDelegate.swift in Sources */,
+				8D1371522C89D2C700F125A2 /* CrosswordViewModel.swift in Sources */,
+				8D1371502C89D2A200F125A2 /* CrosswordViewController.swift in Sources */,
 				8D44129F2C8828F500071855 /* MainCollectionViewCellViewModel.swift in Sources */,
 				8D1371492C88DBD700F125A2 /* WeatherViewConrtoller.swift in Sources */,
 				8D4412632C88230600071855 /* SceneDelegate.swift in Sources */,

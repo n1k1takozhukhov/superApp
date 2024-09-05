@@ -59,7 +59,7 @@ extension MainCollectionViewController: UICollectionViewDataSource {
 //MARK: - UICollectionViewDelegate
 extension MainCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {        
-        let weatherViewConrtoller = WeatherViewConrtoller()
+        let weatherViewConrtolTicTacToeViewControllerler = WeatherViewConrtoller()
         weatherViewConrtoller.modalPresentationStyle = .pageSheet
 
         present(weatherViewConrtoller, animated: true, completion: nil)

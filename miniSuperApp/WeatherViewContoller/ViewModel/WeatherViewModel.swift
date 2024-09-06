@@ -1,5 +1,3 @@
-import UIKit
-
 final class WeatherViewModel {
     //MARK: Variables
     var condition: Bool = true {
@@ -8,7 +6,6 @@ final class WeatherViewModel {
         }
     }
     private(set) var imageName: String = "square.and.arrow.up.on.square"
-
     
     //MARK: Selectors
     func toggleCondition() {
@@ -18,9 +15,5 @@ final class WeatherViewModel {
     
     private func updateImageName() {
         imageName = condition ? "square.and.arrow.up.on.square" : "square.and.arrow.up.on.square.fill"
-    }
-    
-    func getTitle() -> String {
-        return "WeatherViewConrtoller"
     }
 }

@@ -1,5 +1,6 @@
 import UIKit
 import CoreLocation
+import WeatherKit
 
 final class WeatherViewController: UIViewController {
     //MARK: Variables
@@ -15,6 +16,10 @@ final class WeatherViewController: UIViewController {
     //MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        
         setupConstrain()
         updateUI()
         setupTapGesture()
@@ -31,17 +36,72 @@ final class WeatherViewController: UIViewController {
         switchFrameSize.image = UIImage(systemName: viewModel.imageName)
         updateSheetPresentation()
 
-        titleLabel.text = "WeatherViewConrtoller ☁️"
+        titleLabel.text = "WeatherViewController ☁️"
         titleLabel.font = .systemFont(ofSize: 28)
         
-        weatherCityTitle.text = "Current city - ☠️"
+        weatherCityTitle.text = "Current city - Loading..."
         weatherCityTitle.font = .systemFont(ofSize: 24)
         
-        weatherTitle.text = "Сurrent temperature - 🥶"
+        weatherTitle.text = "Current temperature - Loading..."
         weatherTitle.font = .systemFont(ofSize: 18)
     }
 }
 
+//MARK: - CoreLocation Delegate
+extension WeatherViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        
+        let latitude = location.coordinate.latitude
+        let longitude = location.coordinate.longitude
+        
+        getWeather(latitude: latitude, longitude: longitude)
+        getCityName(from: location)
+        locationManager.stopUpdatingLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error getting location: \(error.localizedDescription)")
+    }
+}
+
+//MARK: - WeatherKit API
+@available(iOS 16.0, *)
+extension WeatherViewController {
+    func getWeather(latitude: Double, longitude: Double) {
+        let weatherService = WeatherService()
+        let location = CLLocation(latitude: latitude, longitude: longitude)
+        
+        Task {
+            do {
+                let weather = try await weatherService.weather(for: location)
+                let currentWeather = weather.currentWeather
+                DispatchQueue.main.async {
+                    self.weatherTitle.text = "Current temperature - \(currentWeather.temperature)°"
+                }
+            } catch {
+                print("Error getting weather: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func getCityName(from location: CLLocation) {
+        let geocoder = CLGeocoder()
+        
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let error = error {
+                print("Error getting city name: \(error.localizedDescription)")
+            } else if let placemark = placemarks?.first {
+                let city = placemark.locality ?? "Unknown city"
+                
+                // Обновляем название города
+                DispatchQueue.main.async {
+                    self.weatherCityTitle.text = "Current city - \(city)"
+                }
+            }
+        }
+    }
+}
 
 //MARK: - Screen Rotation
 extension WeatherViewController {
@@ -58,7 +118,6 @@ extension WeatherViewController {
         sheetPresentation.prefersGrabberVisible = true
     }
     
-    
     private func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         switchFrameSize.isUserInteractionEnabled = true
@@ -70,7 +129,6 @@ extension WeatherViewController {
         updateUI()
     }
 }
-
 
 //MARK: - Setup Constrain
 private extension WeatherViewController {
@@ -117,7 +175,6 @@ private extension WeatherViewController {
         ])
     }
 }
-
 
 //MARK: - Make UI
 private extension WeatherViewController {

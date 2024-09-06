@@ -10,7 +10,7 @@ final class CrosswordViewModel {
     private(set) var imageName: String = "square.and.arrow.up.on.square"
     let crosswordData: [CrosswordItem] = [
         CrosswordItem(question: "Имя кандидата", answer: "НИКИТА"),
-        CrosswordItem(question: "Название компании в которую все хотят", answer: "ВКОНТАКТЕ"),
+        CrosswordItem(question: "Название компании в которую все хотят попасть 🙃", answer: "ВКОНТАКТЕ"),
         CrosswordItem(question: "Что оценивает это приложение", answer: "ЗНАНИЯ")
     ]
     var crosswordCells: [[CrosswordCell]] = []
@@ -24,11 +24,7 @@ final class CrosswordViewModel {
     private func updateImageName() {
         imageName = condition ? "square.and.arrow.up.on.square" : "square.and.arrow.up.on.square.fill"
     }
-    
-    func getTitle() -> String {
-        return "WeatherViewConrtoller"
-    }
-    
+
     func initializeCrosswordCells() {
         var cells: [[CrosswordCell]] = []
         

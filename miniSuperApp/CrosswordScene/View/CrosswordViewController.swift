@@ -7,6 +7,8 @@ final class CrosswordViewController: UIViewController {
     private let locationManager = CLLocationManager()
     
     //MARK: UI Components
+    private let scrollView = makeScrollView()
+    private let contentView = UIView()
     private let titleLabel = makeLabel()
     private let switchFrameSize = makeImage()
     private let crosswordStackView = makeStackView()
@@ -35,8 +37,7 @@ final class CrosswordViewController: UIViewController {
         view.backgroundColor = .systemBackground
         switchFrameSize.image = UIImage(systemName: viewModel.imageName)
         updateSheetPresentation()
-        
-        titleLabel.text = "CrosswordViewController ☁️"
+        titleLabel.text = "Crossword game Ⳃ"
         titleLabel.font = .systemFont(ofSize: 28)
         
         let getSearchQuestions = viewModel.crosswordData.enumerated().map { index, item in
@@ -113,14 +114,28 @@ final class CrosswordViewController: UIViewController {
     @objc private func textFieldChanged(_ textField: UITextField) {
         let row = textField.tag / 100
         let col = textField.tag % 100
-        if let text = textField.text {
-            if text.count <= 1 {
-                viewModel.crosswordCells[row][col].textField = text
-            } else if text.count > 1 {
-                let newText = String(text.prefix(1))
-                textField.text = newText
-                viewModel.crosswordCells[row][col].textField = newText
+        
+        if let text = textField.text, text.count > 0 {
+            let newText = String(text.prefix(1).uppercased())
+            textField.text = newText
+            viewModel.crosswordCells[row][col].textField = newText
+            moveToNextTextField(currentRow: row, currentCol: col)
+        }
+    }
+
+    private func moveToNextTextField(currentRow: Int, currentCol: Int) {
+        let nextCol = currentCol + 1
+        var nextRow = currentRow
+        
+        if nextCol >= viewModel.crosswordCells[currentRow].count {
+            nextRow += 1
+            if nextRow < viewModel.crosswordCells.count {
+                let nextTextField = crosswordStackView.viewWithTag(nextRow * 100) as? UITextField
+                nextTextField?.becomeFirstResponder()
             }
+        } else {
+            let nextTextField = crosswordStackView.viewWithTag(currentRow * 100 + nextCol) as? UITextField
+            nextTextField?.becomeFirstResponder()
         }
     }
 }
@@ -158,6 +173,23 @@ extension CrosswordViewController {
 //MARK: - Setup Constrain
 private extension CrosswordViewController {
     func setupConstrain() {
+        view.addSubview(scrollView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+        ])
         setupSwitchFrameSize()
         setupConstrains()
         setupCrosswordStackView()
@@ -166,35 +198,35 @@ private extension CrosswordViewController {
     }
     
     func setupSwitchFrameSize() {
-        view.addSubview(switchFrameSize)
+        contentView.addSubview(switchFrameSize)
         
         NSLayoutConstraint.activate([
-            switchFrameSize.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            switchFrameSize.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+            switchFrameSize.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30),
+            switchFrameSize.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
     func setupConstrains() {
-        view.addSubview(titleLabel)
+        contentView.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30)
+            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 30)
         ])
     }
     
     func setupCrosswordStackView() {
-        view.addSubview(crosswordStackView)
+        contentView.addSubview(crosswordStackView)
         
         NSLayoutConstraint.activate([
             crosswordStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            crosswordStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            crosswordStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            crosswordStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            crosswordStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
         ])
     }
     
     func setupSearchQuestions() {
-        view.addSubview(searchQuestions)
+        contentView.addSubview(searchQuestions)
         
         NSLayoutConstraint.activate([
             searchQuestions.topAnchor.constraint(equalTo: crosswordStackView.bottomAnchor, constant: 20),
@@ -204,18 +236,18 @@ private extension CrosswordViewController {
     }
     
     func setupCheckButton() {
-        view.addSubview(checkButton)
-        view.addSubview(resultLabel)
+        contentView.addSubview(checkButton)
+        contentView.addSubview(resultLabel)
 
         NSLayoutConstraint.activate([
-            checkButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            checkButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             checkButton.topAnchor.constraint(equalTo: searchQuestions.bottomAnchor, constant: 20),
             checkButton.widthAnchor.constraint(equalToConstant: 200),
             checkButton.heightAnchor.constraint(equalToConstant: 50),
             
             resultLabel.topAnchor.constraint(equalTo: checkButton.bottomAnchor, constant: 20),
-            resultLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            resultLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            resultLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            resultLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         ])
     }
 }
@@ -223,6 +255,17 @@ private extension CrosswordViewController {
 
 //MARK: - Make UI
 private extension CrosswordViewController {
+    static func makeScrollView() -> UIScrollView {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.showsVerticalScrollIndicator = true
+        view.showsHorizontalScrollIndicator = false
+        view.alwaysBounceVertical = false
+        view.alwaysBounceHorizontal = false
+        view.isScrollEnabled = true
+        return view
+    }
+
     static func makeLabel() -> UILabel {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false

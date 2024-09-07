@@ -23,8 +23,10 @@ final class MainCollectionViewController: UIViewController {
         setupConstrain()
         updateUI()
         updateCollectionView()
+        viewModel.shuffleModels()
+        collectionView.reloadData()
     }
-    
+
     //MARK: Selectors
     private func updateUI() {
         view.backgroundColor = .systemBackground
@@ -71,7 +73,7 @@ extension MainCollectionViewController: UICollectionViewDelegate {
             viewController = TicTacToeViewController()
         }
 
-        viewController.modalPresentationStyle = .pageSheet // для 1/2 экрана
+        viewController.modalPresentationStyle = .pageSheet
         present(viewController, animated: true, completion: nil)
     }
 }
@@ -100,7 +102,7 @@ private extension MainCollectionViewController {
             collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 }

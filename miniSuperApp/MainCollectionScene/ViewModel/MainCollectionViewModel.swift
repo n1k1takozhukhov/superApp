@@ -1,17 +1,22 @@
 import Foundation
 
 final class MainCollectionViewModel {
-    let models: [AppDataModel]
+    private(set) var models: [AppDataModel]
     
     init(models: [AppDataModel]) {
-        self.models = models
+        self.models = Array(repeating: models, count: 15).flatMap { $0 }
+        shuffleModels()
     }
     
     var cellCounter: Int {
-        return AppDataModel.sampleAppDataModel.count
+        return models.count
     }
     
     func cellViewModel(at index: Int) -> MainCollectionViewCellViewModel {
         return MainCollectionViewCellViewModel(model: models[index])
+    }
+    
+    func shuffleModels() {
+        models.shuffle()
     }
 }

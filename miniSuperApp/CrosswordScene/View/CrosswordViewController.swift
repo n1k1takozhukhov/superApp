@@ -213,8 +213,8 @@ private extension CrosswordViewController {
         contentView.addSubview(dismissButton)
         
         NSLayoutConstraint.activate([
-            dismissButton.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 30),
-            dismissButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30)
+            dismissButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
+            dismissButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
     
@@ -223,7 +223,7 @@ private extension CrosswordViewController {
         
         NSLayoutConstraint.activate([
             switchFrameSize.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30),
-            switchFrameSize.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            switchFrameSize.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor)
         ])
     }
     
@@ -232,7 +232,7 @@ private extension CrosswordViewController {
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 30),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
     }
     

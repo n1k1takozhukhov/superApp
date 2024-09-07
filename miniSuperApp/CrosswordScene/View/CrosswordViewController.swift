@@ -15,6 +15,7 @@ final class CrosswordViewController: UIViewController {
     private let searchQuestions = makeLabel()
     private let resultLabel = makeLabel()
     private lazy var checkButton = makeCheckButton()
+    private lazy var dismissButton = makeDismissButton()
 
     
     //MARK: LifeCycle
@@ -50,14 +51,24 @@ final class CrosswordViewController: UIViewController {
         checkButton.setTitle("Проверить ответы", for: .normal)
         checkButton.addAction(UIAction { [ weak self] _ in
             guard let self = self else { return }
-            self.checkButtonTapped()
+            self.didTapCheckButtonTapped()
+        }, for: .touchUpInside)
+        
+        dismissButton.setTitle("dismiss", for: .normal)
+        dismissButton.addAction(UIAction { [ weak self] _ in
+            guard let self = self else { return }
+            self.didTapDismissButton()
         }, for: .touchUpInside)
     }
     
-    private func checkButtonTapped() {
+    private func didTapCheckButtonTapped() {
         viewModel.verifyAnswers()
         resultLabel.text = viewModel.resultMessage
         resultLabel.textColor = viewModel.resultMessage == "Кроссворд заполнен правильно!" ? .green : .red
+    }
+    
+    private func didTapDismissButton() {
+        self.dismiss(animated: true)
     }
     
     private func createCrosswordGrid() {
@@ -190,11 +201,21 @@ private extension CrosswordViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         ])
+        setupDismissButton()
         setupSwitchFrameSize()
-        setupConstrains()
+        setupTitleLabel()
         setupCrosswordStackView()
         setupSearchQuestions()
         setupCheckButton()
+    }
+    
+    func setupDismissButton() {
+        contentView.addSubview(dismissButton)
+        
+        NSLayoutConstraint.activate([
+            dismissButton.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 30),
+            dismissButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30)
+        ])
     }
     
     func setupSwitchFrameSize() {
@@ -206,12 +227,12 @@ private extension CrosswordViewController {
         ])
     }
     
-    func setupConstrains() {
+    func setupTitleLabel() {
         contentView.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 30)
+            titleLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 30),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 20)
         ])
     }
     
@@ -220,8 +241,8 @@ private extension CrosswordViewController {
         
         NSLayoutConstraint.activate([
             crosswordStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            crosswordStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            crosswordStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            crosswordStackView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            crosswordStackView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -20),
         ])
     }
     
@@ -298,6 +319,12 @@ private extension CrosswordViewController {
         view.backgroundColor = .systemBlue
         view.setTitleColor(.white, for: .normal)
         view.layer.cornerRadius = 8
+        return view
+    }
+    
+    func makeDismissButton() -> UIButton {
+        let view = UIButton(type: .system)
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }
 }

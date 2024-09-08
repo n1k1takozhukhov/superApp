@@ -1,22 +1,23 @@
 import UIKit
-import CoreLocation
 
 final class WeatherViewController: UIViewController {
     //MARK: Variables
     private let viewModel = WeatherViewModel()
-    private let locationManager = CLLocationManager()
     
     //MARK: UI Components
     private let titleLabel = makeTitle()
     private let switchFrameSize = makeImage()
     private let weatherCityTitle = makeTitle()
     private let weatherTitle = makeTitle()
+    private lazy var dismissButton = makeDismissButton()
+    
     
     //MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupConstrain()
         updateUI()
+        updateScreed()
         setupTapGesture()
     }
     
@@ -26,19 +27,40 @@ final class WeatherViewController: UIViewController {
     }
     
     //MARK: Selectors
-    private func updateUI() {
-        view.backgroundColor = .systemBackground
+    private func updateScreed() {
         switchFrameSize.image = UIImage(systemName: viewModel.imageName)
         updateSheetPresentation()
+    }
+    
+    private func updateUI() {
+        view.backgroundColor = .systemBackground
+        updateSheetPresentation()
 
-        titleLabel.text = "WeatherViewConrtoller ☁️"
+        titleLabel.text = "WeatherView ☁️"
         titleLabel.font = .systemFont(ofSize: 28)
         
-        weatherCityTitle.text = "Current city - ☠️"
-        weatherCityTitle.font = .systemFont(ofSize: 24)
+        weatherCityTitle.text = "Current city - loading..."
+        weatherCityTitle.font = .systemFont(ofSize: 18)
         
-        weatherTitle.text = "Сurrent temperature - 🥶"
+        weatherTitle.text = "Current temperature - loading..."
         weatherTitle.font = .systemFont(ofSize: 18)
+        
+        viewModel.onWeatherUpdate = { [weak self] city, temperature in
+            guard let self = self else { return }
+            self.weatherCityTitle.text = "Current city - \(city)"
+            self.weatherTitle.text = "\(temperature)"
+            self.weatherTitle.font = .systemFont(ofSize: 56)
+        }
+        
+        dismissButton.setTitle("dismiss", for: .normal)
+        dismissButton.addAction(UIAction { [ weak self] _ in
+            guard let self = self else { return }
+            self.didTapDismissButton()
+        }, for: .touchUpInside)
+    }
+    
+    private func didTapDismissButton() {
+        self.dismiss(animated: true)
     }
 }
 
@@ -58,7 +80,6 @@ extension WeatherViewController {
         sheetPresentation.prefersGrabberVisible = true
     }
     
-    
     private func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         switchFrameSize.isUserInteractionEnabled = true
@@ -67,18 +88,27 @@ extension WeatherViewController {
     
     @objc private func handleTap() {
         viewModel.toggleCondition()
-        updateUI()
+        updateScreed()
     }
 }
-
 
 //MARK: - Setup Constrain
 private extension WeatherViewController {
     func setupConstrain() {
+        setupDismissButton()
         setupSwitchFrameSize()
         setupConstrains()
         setupWeatherCityTitle()
         setupWeatherTitle()
+    }
+    
+    func setupDismissButton() {
+        view.addSubview(dismissButton)
+        
+        NSLayoutConstraint.activate([
+            dismissButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            dismissButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+        ])
     }
     
     func setupSwitchFrameSize() {
@@ -86,7 +116,7 @@ private extension WeatherViewController {
         
         NSLayoutConstraint.activate([
             switchFrameSize.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            switchFrameSize.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+            switchFrameSize.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor)
         ])
     }
     
@@ -103,7 +133,7 @@ private extension WeatherViewController {
         view.addSubview(weatherCityTitle)
         
         NSLayoutConstraint.activate([
-            weatherCityTitle.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40),
+            weatherCityTitle.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
             weatherCityTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
@@ -113,11 +143,10 @@ private extension WeatherViewController {
         
         NSLayoutConstraint.activate([
             weatherTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            weatherTitle.topAnchor.constraint(equalTo: weatherCityTitle.bottomAnchor, constant: 20)
+            weatherTitle.topAnchor.constraint(equalTo: weatherCityTitle.bottomAnchor, constant: 60)
         ])
     }
 }
-
 
 //MARK: - Make UI
 private extension WeatherViewController {
@@ -135,6 +164,12 @@ private extension WeatherViewController {
         view.widthAnchor.constraint(equalToConstant: 30).isActive = true
         view.heightAnchor.constraint(equalToConstant: 30).isActive = true
         view.contentMode = .scaleAspectFit
+        return view
+    }
+    
+    func makeDismissButton() -> UIButton {
+        let view = UIButton(type: .system)
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }
 }
